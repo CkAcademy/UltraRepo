@@ -1,8 +1,8 @@
 {
-    "name": "HepsiDepo",
-    "description": "Türkçe Cloudstream eklentiler listesi",
+    "name": "UltraRepo",
+    "description": "Doyasıya eğlence...",
     "manifestVersion": 1,
     "pluginLists": [
-      "https://raw.githubusercontent.com/NediyoOluuum/HepsiDepo/refs/heads/main/plugins.json"
+      "https://raw.githubusercontent.com/CkAcademy/UltraRepo/main/plugins.json"
     ]
 }

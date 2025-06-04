@@ -1,0 +1,8 @@
+{
+    "name": "HepsiDepo",
+    "description": "Türkçe Cloudstream eklentiler listesi",
+    "manifestVersion": 1,
+    "pluginLists": [
+      "https://raw.githubusercontent.com/NediyoOluuum/HepsiDepo/refs/heads/main/plugins.json"
+    ]
+}

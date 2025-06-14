@@ -12,10 +12,10 @@ jobs:
   sync-plugins:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout main branch
+      - name: Checkout default branch
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.event.repository.default_branch }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v4

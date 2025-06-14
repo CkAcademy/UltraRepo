@@ -1,4 +1,4 @@
-# Bu bot @WantedGang tarafından yazılmıştır...
+# This bot was written by @WantedGang...
 name: Plugin JSON Sync
 
 on:
@@ -26,7 +26,7 @@ jobs:
       - name: Install node-fetch
         run: npm install node-fetch@2
 
-      - name: Get plugins.json sources, filter nsfw and update authors
+      - name: Get plugins.json sources, filter NSFW and update authors
         run: |
           node -e "
           const fetch = require('node-fetch');
@@ -41,7 +41,7 @@ jobs:
             'https://raw.githubusercontent.com/Sertel392/Makotogecici/main/plugins.json',
             'https://raw.githubusercontent.com/WantedGang/WG-Temporary/main/plugins.json'
           ];
-          // Owner of the warehouse where the bot is running
+          // Owner of the repository where the bot is running
           const botOwner = process.env.GITHUB_REPOSITORY ? process.env.GITHUB_REPOSITORY.split('/')[0] : '';
           (async () => {
             let merged = [];
@@ -79,7 +79,7 @@ jobs:
               }
             }
             fs.writeFileSync('plugins.json', JSON.stringify(merged, null, 2));
-            console.log('plugins.json created. Total plugin:', merged.length);
+            console.log('plugins.json created. Total plugins:', merged.length);
           })();
           "
 

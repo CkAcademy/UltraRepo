@@ -57,6 +57,7 @@ jobs:
                   console.warn(\`\${url} -> plugins.json not found or invalid.\`);
                   continue;
                 }
+                let added = 0;
                 for (const plugin of plugins) {
                   if (Array.isArray(plugin.tvTypes) && plugin.tvTypes.includes('NSFW')) continue;
                   // authors update
@@ -72,7 +73,10 @@ jobs:
                     }
                   }
                   merged.push(plugin);
+                  added++;
                 }
+                console.log('Source: ' + url);
+                console.log('→ ' + added + ' objects added');
               } catch (e) {
                 console.error(\`GET \${url} -> error: \${e.message}\`);
                 continue;

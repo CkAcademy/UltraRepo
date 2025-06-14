@@ -1,0 +1,94 @@
+# Bu bot @WantedGang tarafından yazılmıştır...
+name: Plugin JSON Sync
+
+on:
+  schedule:
+    - cron: '0 20 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync-plugins:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout master branch
+        uses: actions/checkout@v4
+        with:
+          ref: master
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install node-fetch
+        run: npm install node-fetch@2
+
+      - name: Plugins.json kaynaklarını çek, filtrele ve güncelle
+        run: |
+          node -e "
+          const fetch = require('node-fetch');
+          const fs = require('fs');
+          const urls = [
+            'https://raw.githubusercontent.com/maarrem/cs-Kekik/builds/plugins.json',
+            'https://raw.githubusercontent.com/nikyokki/nik-cloudstream/builds/plugins.json',
+            'https://raw.githubusercontent.com/feroxx/Kekik-cloudstream/builds/plugins.json',
+            'https://raw.githubusercontent.com/Kraptor123/cs-kekikanime/builds/plugins.json',
+            'https://raw.githubusercontent.com/sarapcanagii/Pitipitii/builds/plugins.json',
+            'https://raw.githubusercontent.com/ramazansancar/keyiflerolsun_Kekik-cloudstream/builds/plugins.json',
+            'https://raw.githubusercontent.com/Sertel392/Makotogecici/main/plugins.json',
+            'https://raw.githubusercontent.com/WantedGang/WG-Temporary/main/plugins.json'
+          ];
+          const ownerFromUrl = url => {
+            const match = url.match(/githubusercontent.com\/([^\/]+)\//);
+            return match ? match[1] : '';
+          };
+          (async () => {
+            let merged = [];
+            for (const url of urls) {
+              const owner = ownerFromUrl(url);
+              try {
+                const res = await fetch(url);
+                if (!res.ok) {
+                  console.warn(\`GET \${url} -> \${res.status} \${res.statusText}\`);
+                  continue;
+                }
+                const plugins = await res.json();
+                if (!Array.isArray(plugins)) {
+                  console.warn(\`\${url} -> plugins.json bulunamadı veya geçersiz.\`);
+                  continue;
+                }
+                for (const plugin of plugins) {
+                  if (Array.isArray(plugin.tvTypes) && plugin.tvTypes.includes('NSFW')) continue;
+                  if (!plugin.authors) {
+                    plugin.authors = [owner];
+                  } else if (Array.isArray(plugin.authors)) {
+                    if (!plugin.authors.includes(owner)) plugin.authors.push(owner);
+                  } else if (typeof plugin.authors === 'string') {
+                    if (plugin.authors !== owner) {
+                      plugin.authors = [plugin.authors, owner];
+                    } else {
+                      plugin.authors = [owner];
+                    }
+                  }
+                  merged.push(plugin);
+                }
+              } catch (e) {
+                console.error(\`GET \${url} -> error: \${e.message}\`);
+                continue;
+              }
+            }
+            fs.writeFileSync('plugins.json', JSON.stringify(merged, null, 2));
+            console.log('plugins.json oluşturuldu. Toplam plugin:', merged.length);
+          })();
+          "
+
+      - name: Değişiklik var mı kontrol et ve pushla
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add plugins.json
+          git diff --staged --quiet || git commit -m "Auto update plugins.json"
+          git push

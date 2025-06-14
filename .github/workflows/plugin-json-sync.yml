@@ -1,4 +1,3 @@
-# Bu bot @WantedGang tarafından yazılmıştır...
 name: Plugin JSON Sync
 
 on:
@@ -26,7 +25,7 @@ jobs:
       - name: Install node-fetch
         run: npm install node-fetch@2
 
-      - name: Plugins.json kaynaklarını çek, filtrele ve güncelle
+      - name: Plugins.json kaynaklarını çek, NSFW filtrele ve authors güncelle
         run: |
           node -e "
           const fetch = require('node-fetch');
@@ -41,14 +40,11 @@ jobs:
             'https://raw.githubusercontent.com/Sertel392/Makotogecici/main/plugins.json',
             'https://raw.githubusercontent.com/WantedGang/WG-Temporary/main/plugins.json'
           ];
-          const ownerFromUrl = url => {
-            const match = url.match(/githubusercontent.com\/([^\/]+)\//);
-            return match ? match[1] : '';
-          };
+          // Botun çalıştığı repo sahibi
+          const botOwner = process.env.GITHUB_REPOSITORY ? process.env.GITHUB_REPOSITORY.split('/')[0] : '';
           (async () => {
             let merged = [];
             for (const url of urls) {
-              const owner = ownerFromUrl(url);
               try {
                 const res = await fetch(url);
                 if (!res.ok) {
@@ -62,15 +58,16 @@ jobs:
                 }
                 for (const plugin of plugins) {
                   if (Array.isArray(plugin.tvTypes) && plugin.tvTypes.includes('NSFW')) continue;
+                  // authors güncellemesi
                   if (!plugin.authors) {
-                    plugin.authors = [owner];
+                    plugin.authors = [botOwner];
                   } else if (Array.isArray(plugin.authors)) {
-                    if (!plugin.authors.includes(owner)) plugin.authors.push(owner);
+                    if (!plugin.authors.includes(botOwner)) plugin.authors.push(botOwner);
                   } else if (typeof plugin.authors === 'string') {
-                    if (plugin.authors !== owner) {
-                      plugin.authors = [plugin.authors, owner];
+                    if (plugin.authors !== botOwner) {
+                      plugin.authors = [plugin.authors, botOwner];
                     } else {
-                      plugin.authors = [owner];
+                      plugin.authors = [botOwner];
                     }
                   }
                   merged.push(plugin);

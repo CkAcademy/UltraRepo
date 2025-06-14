@@ -3208,7 +3208,7 @@
     "iconUrl": "https://netfree2.cc/mobile/img/nf2/icon_x192.png",
     "apiVersion": 1,
     "repositoryUrl": "https://github.com/feroxx/Kekik-cloudstream",
-    "fileSize": 37977,
+    "fileSize": 39144,
     "status": 1,
     "language": "hi",
     "authors": [
@@ -3220,7 +3220,7 @@
       "Movie",
       "TvSeries"
     ],
-    "version": 23,
+    "version": 24,
     "internalName": "NetflixMirror",
     "description": "Netflix, PrimeVideo Content in Multiple Languages",
     "url": "https://raw.githubusercontent.com/feroxx/Kekik-cloudstream/builds/NetflixMirror.cs3",
@@ -3337,7 +3337,7 @@
     "iconUrl": "https://www.google.com/s2/favicons?domain=www.superfilmgeldi.info&sz=%size%",
     "apiVersion": 1,
     "repositoryUrl": "https://github.com/feroxx/Kekik-cloudstream",
-    "fileSize": 18238,
+    "fileSize": 18237,
     "status": 1,
     "language": "tr",
     "authors": [
@@ -3347,7 +3347,7 @@
     "tvTypes": [
       "Movie"
     ],
-    "version": 6,
+    "version": 7,
     "internalName": "SuperFilmGeldi",
     "description": "Hd film izliyerek arkadaşlarınızla ve sevdiklerinizle iyi bir vakit geçirmek istiyorsanız açın bir film eğlenmeye bakın. Bilim kurgu filmleri, aşk drama vahşet aşk romantik sıradışı korku filmlerini izle.",
     "url": "https://raw.githubusercontent.com/feroxx/Kekik-cloudstream/builds/SuperFilmGeldi.cs3",

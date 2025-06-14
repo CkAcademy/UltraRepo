@@ -1,3 +1,4 @@
+# Bu bot @WantedGang tarafından yazılmıştır...
 name: Plugin JSON Sync
 
 on:
@@ -25,7 +26,7 @@ jobs:
       - name: Install node-fetch
         run: npm install node-fetch@2
 
-      - name: Plugins.json kaynaklarını çek, NSFW filtrele ve authors güncelle
+      - name: Get plugins.json sources, filter nsfw and update authors
         run: |
           node -e "
           const fetch = require('node-fetch');
@@ -40,7 +41,7 @@ jobs:
             'https://raw.githubusercontent.com/Sertel392/Makotogecici/main/plugins.json',
             'https://raw.githubusercontent.com/WantedGang/WG-Temporary/main/plugins.json'
           ];
-          // Botun çalıştığı repo sahibi
+          // Owner of the warehouse where the bot is running
           const botOwner = process.env.GITHUB_REPOSITORY ? process.env.GITHUB_REPOSITORY.split('/')[0] : '';
           (async () => {
             let merged = [];
@@ -53,12 +54,12 @@ jobs:
                 }
                 const plugins = await res.json();
                 if (!Array.isArray(plugins)) {
-                  console.warn(\`\${url} -> plugins.json bulunamadı veya geçersiz.\`);
+                  console.warn(\`\${url} -> plugins.json not found or invalid.\`);
                   continue;
                 }
                 for (const plugin of plugins) {
                   if (Array.isArray(plugin.tvTypes) && plugin.tvTypes.includes('NSFW')) continue;
-                  // authors güncellemesi
+                  // authors update
                   if (!plugin.authors) {
                     plugin.authors = [botOwner];
                   } else if (Array.isArray(plugin.authors)) {
@@ -78,11 +79,11 @@ jobs:
               }
             }
             fs.writeFileSync('plugins.json', JSON.stringify(merged, null, 2));
-            console.log('plugins.json oluşturuldu. Toplam plugin:', merged.length);
+            console.log('plugins.json created. Total plugin:', merged.length);
           })();
           "
 
-      - name: Değişiklik var mı kontrol et ve pushla
+      - name: Check if there is a change and push
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
